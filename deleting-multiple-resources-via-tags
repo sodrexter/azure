@@ -1,0 +1,4 @@
+foreach ($r in az resource list --tag tage=value --query [].id -o tsv) {
+echo "Deleting $r"
+az resource delete --ids $r
+}
