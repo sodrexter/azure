@@ -1,0 +1,66 @@
+Resources
+
+Using the given credentials, login to the Azure portal.
+
+    In the Azure Portal, click the Cloud Shell icon (>_ ) in the upper right.
+    Select PowerShell.
+    Click Show advanced settings.
+    Use the same region as the lab provided storage account and the existing resource group or create a new Storage account (use a globally unique name).
+    For File share, select Create new and give it a name of "fileshare".
+    Click Create storage.
+    Note: If you have trouble, try using the existing storage account).
+
+Using the appropriate Azure CLI commands (replace 'YourName' with your name):
+
+    Add the tags Environment=Production Dept=IT CreatedBy=YourName to the resource group.
+    Remove the existing tag from the VM and mark it for deletion by adding the tag MarkForDeletion=Yes.
+    Apply the Dept=IT tag, the Environment=Production tag and the CreatedBy=YourName tag to the virtual network.
+
+You will have successfully completed this hands-on lab when all tags have been applied to all three resources.
+==============================
+
+Add Tags to the Resource Group
+
+    In Azure Cloud Shell, perform the command to list all resource groups for this lab.
+    Perform the CLI command that will apply the following tags to the resource group (replace YourName with your name):
+        Environment=Production
+        Dept=IT
+        CreatedBy=YourName
+
+
+Remove Tags for VM and Mark for Deletion
+
+    Perform the CLI command to list the existing tags for the virtual machines in this lab.
+    Remove the existing tags from the VM.
+    Mark the VM for deletion by adding the tag MarkForDeletion=Yes.
+
+
+Change Tags for the Virtual Network
+
+    Perform the CLI command to list the virtual networks and their associated tags
+    Perform the CLI command to overrite the existing tags with the following tags (replace YourName with your name):
+        Environment=Production
+        Dept=IT
+        CreatedBy=YourName
+        
+============================================================
+
+#adding a tag
+az group update -n "GROUP-NAME" --tags "Environment=Production" "Dept=IT" "CreatedBy=Sodrexter"
+
+#Listing VM:
+az vm list
+or
+az vm list --query '[].{name:name, resourceGroup:resourceGroup, tags:tags}' -o json
+
+#Removing tag from a vm
+az vm update -g "RESOURCE-GOURP" -n NAME-OF-THE-VM --remove tags.defaultExperience
+
+#Adding a Tag to a VM
+az vm update -g "RESOURCE-GOURP" -n NAME-OF-THE-VM --set tags.MarkForDeletion=Yes
+
+#Listing vnet
+az network vnet list --query '[].{name:name, resourceGroup:resourceGroup, tags:tags}' -o json
+
+# updating tags for a vnet
+az resource tag --tags "Dept=IT" "Environment=Prod" "CreatedBy=sodrexter" -g "RESOURCE-GOURP" -n "vnet1" --resource-type "Microsoft.Network/virtualNetworks"
